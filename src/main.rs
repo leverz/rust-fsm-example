@@ -66,6 +66,7 @@ impl TrafficLight<Green> {
 impl From<TrafficLight<Green>> for TrafficLight<Yellow> {
     fn from(green: TrafficLight<Green>) -> TrafficLight<Yellow> {
         println!("last state is {:?}", green);
+        sleep(green.state.wait_time);
         TrafficLight {
             state: Yellow::new(),
         }
@@ -75,6 +76,7 @@ impl From<TrafficLight<Green>> for TrafficLight<Yellow> {
 impl From<TrafficLight<Yellow>> for TrafficLight<Red> {
     fn from(yellow: TrafficLight<Yellow>) -> TrafficLight<Red> {
         println!("last state is {:?}", yellow);
+        sleep(yellow.state.wait_time);
         TrafficLight {
             state: Red::new(),
         }
@@ -84,6 +86,7 @@ impl From<TrafficLight<Yellow>> for TrafficLight<Red> {
 impl From<TrafficLight<Red>> for TrafficLight<Green> {
     fn from(red: TrafficLight<Red>) -> TrafficLight<Green> {
         println!("last state is {:?}", red);
+        sleep(red.state.wait_time);
         TrafficLight {
             state: Green::new(),
         }
