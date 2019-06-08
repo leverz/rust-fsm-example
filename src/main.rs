@@ -100,6 +100,9 @@ enum TrafficLightWrapper {
 }
 
 impl TrafficLightWrapper {
+    fn new() -> Self {
+        TrafficLightWrapper::Green(TrafficLight::new())
+    }
     fn step(mut self) -> Self {
         match self {
             TrafficLightWrapper::Green(green) => TrafficLightWrapper::Yellow(green.into()),
@@ -109,22 +112,10 @@ impl TrafficLightWrapper {
     }
 }
 
-struct Factory {
-    traffic_light: TrafficLightWrapper
-}
-
-impl Factory {
-    fn new() -> Self {
-        Factory{
-            traffic_light: TrafficLightWrapper::Green(TrafficLight::new())
-        }
-    }
-}
-
 fn main() {
-    let mut state_machine = Factory::new();
+    let mut state_machine = TrafficLightWrapper::new();
 
     loop {
-        state_machine.traffic_light = state_machine.traffic_light.step();
+        state_machine = state_machine.step();
     }
 }
