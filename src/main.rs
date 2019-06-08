@@ -21,30 +21,36 @@ struct TrafficLight {
     state: TrafficLightState,
 }
 
-fn change_light(mut state: &TrafficLightState) -> TrafficLightState {
-    match state {
-        TrafficLightState::Green { waiting_time } => {
-            sleep(*waiting_time);
-            TrafficLightState::Yellow { waiting_time: std::time::Duration::new(10, 0) }
-        },
-        TrafficLightState::Red { waiting_time } => {
-            sleep(*waiting_time);
-            TrafficLightState::Green { waiting_time: std::time::Duration::new(60, 0) }
-        },
-        TrafficLightState::Yellow { waiting_time } => {
-            sleep(*waiting_time);
-            TrafficLightState::Red { waiting_time: std::time::Duration::new(60, 0) }
+impl TrafficLight {
+    fn new() -> Self {
+        TrafficLight {
+            state: TrafficLightState::Green { waiting_time: std::time::Duration::new(60, 0) }
+        }
+    }
+
+    fn change_light(&mut self) {
+        self.state = match self.state {
+            TrafficLightState::Green { waiting_time } => {
+                sleep(waiting_time);
+                TrafficLightState::Yellow { waiting_time: std::time::Duration::new(10, 0) }
+            },
+            TrafficLightState::Red { waiting_time } => {
+                sleep(waiting_time);
+                TrafficLightState::Green { waiting_time: std::time::Duration::new(60, 0) }
+            },
+            TrafficLightState::Yellow { waiting_time } => {
+                sleep(waiting_time);
+                TrafficLightState::Red { waiting_time: std::time::Duration::new(60, 0) }
+            }
         }
     }
 }
 
 fn main() {
-    let mut state_machine = TrafficLight{
-        state: TrafficLightState::Green { waiting_time: std::time::Duration::new(60, 0) }
-    };
+    let mut state_machine = TrafficLight::new();
 
     loop {
         println!("{:?}", state_machine.state);
-        state_machine.state = change_light(&state_machine.state)
+        state_machine.change_light();
     }
 }
